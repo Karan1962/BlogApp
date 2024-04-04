@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Oauth from "./Oauth.jsx";
 
 const Form = ({ type }) => {
   const [formData, setFormData] = useState({
@@ -23,6 +24,21 @@ const Form = ({ type }) => {
         passWord: formData.passWord,
         email: formData.email,
       });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+
+    console.log(res);
+  };
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("/api/Auth/login", {
+        userName: formData.userName,
+        passWord: formData.passWord,
+      });
+      if (res.status === 201) navigate("/");
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -95,13 +111,25 @@ const Form = ({ type }) => {
                 })
               }
             />
-            <button
-              onClick={handleSubmit}
-              className="text-white font-bold rounded-md border-none bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 p-2"
-            >
-              {type === "Signup" ? "Signup" : "Login"}
-            </button>
+            {type === "Signup" ? (
+              <button
+                onClick={handleSubmit}
+                className="text-white font-bold rounded-md border-none bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 p-2"
+              >
+                SIGNUP
+              </button>
+            ) : (
+              <button
+                onClick={handleLogin}
+                className="text-white font-bold rounded-md border-none bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 p-2"
+              >
+                LOGIN
+              </button>
+            )}
+
+            <Oauth />
           </form>
+
           <div className="flex justify-between p-2">
             {type === "Signup" ? (
               <h2>Already Have An Account ? </h2>
